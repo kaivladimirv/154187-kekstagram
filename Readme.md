@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Владимир Каймонов](https://up.htmlacademy.ru/javascript/6/user/154187).
-* Наставник: `Неизвестно`.
+* Наставник: `Вадим Федоров`.
 
 ---
 
