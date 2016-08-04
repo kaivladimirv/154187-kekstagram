@@ -13,7 +13,11 @@ function getMessage(a, b) {
       return 'Переданное SVG-изображение содержит [' + a + '] объектов и [' + (b * 4) + '] атрибутов';
 
     case 'object':
-      if (typeof b === 'object') {
+      if (!Array.isArray(a)) {
+        return;
+      }
+
+      if (Array.isArray(b)) {
         var artifactsSquare = 0;
 
         for (var i = 0; i < a.length; i++) {
