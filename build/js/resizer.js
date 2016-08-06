@@ -119,6 +119,10 @@
           this._resizeConstraint.side - this._ctx.lineWidth / 2,
           this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
+      this.drawOverlay();
+
+      this.drawRectConstrainCaption(this._image.naturalWidth + ' x ' + this._image.naturalHeight);
+
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
       // следующий кадр рисовался с привычной системой координат, где точка
@@ -126,6 +130,63 @@
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
       this._ctx.restore();
+    },
+
+    /**
+    * Отрисовка оверлея
+    */
+    drawOverlay: function() {
+      var widthLeftRect = ((this._container.width - this._resizeConstraint.side) / 2) - this._ctx.lineWidth;
+      var widthRightRect = ((this._container.width - this._resizeConstraint.side) / 2) + (this._ctx.lineWidth / 2);
+      var heightTopRect = ((this._container.height - this._resizeConstraint.side) / 2) - this._ctx.lineWidth;
+      var heightBottomRect = ((this._container.height - this._resizeConstraint.side) / 2) + (this._ctx.lineWidth / 2);
+
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+
+      //Левый прямоугольник
+      this._ctx.fillRect(
+          -(this._container.width / 2),
+          -(this._container.height / 2),
+          widthLeftRect,
+          this._container.height);
+
+      //Правый прямоугольник
+      this._ctx.fillRect(
+          (this._container.width / 2) - widthRightRect,
+          -(this._container.height / 2),
+          widthRightRect,
+          this._container.height);
+
+      //Верхний прямоугольник
+      this._ctx.fillRect(
+          -(this._container.width / 2) + widthLeftRect,
+          -(this._container.height / 2),
+          this._resizeConstraint.side + (this._ctx.lineWidth / 2),
+          heightTopRect);
+
+      //Нижний прямоугольник
+      this._ctx.fillRect(
+          -(this._container.width / 2) + widthLeftRect,
+          (this._container.height / 2) - heightBottomRect,
+          this._resizeConstraint.side + (this._ctx.lineWidth / 2),
+          heightBottomRect);
+    },
+
+    /**
+    * Отрисовка подписи над прямоугольником, обозначающим область изображения после кадрирования
+    * @param {string} caption
+    */
+    drawRectConstrainCaption: function(caption) {
+      var fontSize = 12;
+
+      this._ctx.fillStyle = 'white';
+      this._ctx.font = fontSize + 'px "Open Sans"';
+      this._ctx.textAlign = 'center';
+
+      this._ctx.fillText(
+          caption,
+          0,
+          -(this._resizeConstraint.side / 2) - fontSize);
     },
 
     /**
