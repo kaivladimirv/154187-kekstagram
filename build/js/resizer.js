@@ -90,13 +90,6 @@
 
       // Толщина линии.
       this._ctx.lineWidth = 6;
-      // Цвет обводки.
-      this._ctx.strokeStyle = '#ffe753';
-      // Размер штрихов. Первый элемент массива задает длину штриха, второй
-      // расстояние между соседними штрихами.
-      this._ctx.setLineDash([15, 10]);
-      // Смещение первого штриха от начала линии.
-      this._ctx.lineDashOffset = 7;
 
       // Сохранение состояния канваса.
       this._ctx.save();
@@ -113,11 +106,11 @@
 
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
-      this._ctx.strokeRect(
+      this.drawStrokeRectDot(
           (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
           (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2);
+          this._resizeConstraint.side,
+          this._resizeConstraint.side);
 
       this.drawOverlay();
 
@@ -130,6 +123,66 @@
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
       this._ctx.restore();
+    },
+
+    /**
+    * Отрисовка прямоугольника, обозначающего область изображения после кадрирования.
+    */
+    drawStrokeRectDot: function(x, y, width, height) {
+      var lineTop = {
+        x: x,
+        y: y
+      };
+      var lineBottom = {
+        x: x,
+        y: y + height - this._ctx.lineWidth / 2
+      };
+      var lineLeft = {
+        x: x,
+        y: y
+      };
+      var lineRight = {
+        x: x + width - this._ctx.lineWidth / 2,
+        y: y
+      };
+
+      //Отрисовка горизонтальных линий
+      this.drawLineDot(lineTop.x, lineTop.y, width, false);
+      this.drawLineDot(lineBottom.x, lineBottom.y, width, false);
+
+      //Отрисовка вертикальных линий
+      this.drawLineDot(lineLeft.x, lineLeft.y, height, true);
+      this.drawLineDot(lineRight.x, lineRight.y, height, true);
+    },
+
+    /**
+    * Отрисовка линии ввиде точек
+    * @param {number} x
+    * @param {number} y
+    * @param {number} length
+    * @param {boolean} vertical
+    */
+    drawLineDot: function(x, y, length, vertical) {
+      var INDENT = 10;
+      var radius  = this._ctx.lineWidth / 2;
+      var positionStart = vertical ? y : x;
+      var positionEnd = positionStart + length;
+
+      this._ctx.fillStyle = '#ffe753';
+
+      while ((positionStart + radius) < positionEnd) {
+        this._ctx.beginPath();
+        this._ctx.arc(
+          vertical ? x : positionStart,
+          vertical ? positionStart : y,
+          radius,
+          0,
+          2 * Math.PI,
+          false);
+        this._ctx.fill();
+
+        positionStart += radius + INDENT;
+      }
     },
 
     /**
