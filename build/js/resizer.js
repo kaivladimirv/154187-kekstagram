@@ -89,7 +89,7 @@
       // чего-либо с другой обводкой.
 
       // Толщина линии.
-      this._ctx.lineWidth = 6;
+      this._ctx.lineWidth = 4;
 
       // Сохранение состояния канваса.
       this._ctx.save();
@@ -106,7 +106,7 @@
 
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
-      this.drawStrokeRectDot(
+      this.drawStrokeRectZigzag(
           (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
           (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
           this._resizeConstraint.side,
@@ -183,6 +183,114 @@
 
         positionStart += radius + INDENT;
       }
+    },
+
+    /**
+    * Отрисовка прямоугольника, обозначающего область изображения после кадрирования.
+    * Границы отображаются ввиде зигзагов
+    */
+    drawStrokeRectZigzag: function(x, y, width, height) {
+      var SIZE = 10;
+      var lengthLine = width - SIZE * 2;
+      var remainder = lengthLine % (SIZE * 2) ;
+      var halfRemainder = remainder / 2;
+
+      lengthLine -= remainder;
+
+      var lineTop = {
+        x: x + SIZE + halfRemainder,
+        y: y
+      };
+      var lineBottom = {
+        x: x + SIZE + halfRemainder,
+        y: y + height - this._ctx.lineWidth / 2 - SIZE
+      };
+      var lineLeft = {
+        x: x,
+        y: y + SIZE + halfRemainder
+      };
+      var lineRight = {
+        x: x + width - this._ctx.lineWidth / 2 - SIZE,
+        y: y + SIZE + halfRemainder
+      };
+
+      //Отрисовка горизонтальных линий
+      this.drawLineZigzag(lineTop.x, lineTop.y, lengthLine, SIZE, false);
+      this.drawLineZigzag(lineBottom.x, lineBottom.y, lengthLine, SIZE, false, true);
+
+      // //Отрисовка вертикальных линий
+      this.drawLineZigzag(lineLeft.x, lineLeft.y, lengthLine, SIZE, true);
+      this.drawLineZigzag(lineRight.x, lineRight.y, lengthLine, SIZE, true, true);
+
+      //Соединяем линии в углах прямоугольника
+      this._ctx.beginPath();
+      this._ctx.moveTo(lineTop.x, lineTop.y);
+      this._ctx.lineTo(lineLeft.x, lineLeft.y);
+
+      this._ctx.moveTo(lineTop.x + lengthLine, lineTop.y);
+      this._ctx.lineTo(lineRight.x + SIZE, lineRight.y);
+
+      this._ctx.moveTo(lineLeft.x, lineLeft.y + lengthLine);
+      this._ctx.lineTo(lineBottom.x, lineBottom.y + SIZE);
+
+      this._ctx.moveTo(lineRight.x + SIZE, lineRight.y + lengthLine);
+      this._ctx.lineTo(lineBottom.x + lengthLine, lineBottom.y + SIZE);
+
+      this._ctx.stroke();
+
+    },
+
+    /**
+    * Отрисовка линии зигзагами
+    * @param {number} x
+    * @param {number} y
+    * @param {number} length
+    * @param {number} size
+    * @param {boolean} vertical
+    * @param {boolean} turnOver
+    */
+    drawLineZigzag: function(x, y, length, size, vertical, turnOver) {
+      var position = vertical ? y + size : x + size;
+      var positionEnd = position + length;
+      var moveTo = {
+        x: x,
+        y: y
+      };
+      var toX;
+      var toY;
+
+      this._ctx.strokeStyle = '#ffe753';
+
+      this._ctx.beginPath();
+
+      if (turnOver) {
+        moveTo.x = vertical ? x + size : x;
+        moveTo.y = vertical ? y : y + size;
+      }
+
+      this._ctx.moveTo(moveTo.x, moveTo.y);
+
+      while (position < positionEnd) {
+        toX = vertical ? x + size : position;
+        toY = vertical ? position : y + size;
+        if (turnOver) {
+          toX = vertical ? x : position;
+          toY = vertical ? position : y;
+        }
+        this._ctx.lineTo(toX, toY);
+
+        toX = vertical ? x : position + size;
+        toY = vertical ? position + size : y;
+        if (turnOver) {
+          toX = vertical ? x + size : position + size;
+          toY = vertical ? position + size : y + size;
+        }
+        this._ctx.lineTo(toX, toY);
+
+        position += size * 2;
+      }
+
+      this._ctx.stroke();
     },
 
     /**
