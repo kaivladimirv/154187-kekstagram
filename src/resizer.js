@@ -164,7 +164,7 @@
     */
     drawLineDot: function(x, y, length, vertical) {
       var INDENT = 10;
-      var radius  = this._ctx.lineWidth / 2;
+      var radius = this._ctx.lineWidth / 2;
       var positionStart = vertical ? y : x;
       var positionEnd = positionStart + length;
 
@@ -192,7 +192,7 @@
     drawStrokeRectZigzag: function(x, y, width, height) {
       var SIZE = 10;
       var lengthLine = width - SIZE * 2;
-      var remainder = lengthLine % (SIZE * 2) ;
+      var remainder = lengthLine % (SIZE * 2);
       var halfRemainder = remainder / 2;
 
       lengthLine -= remainder;
