@@ -8,6 +8,9 @@
 'use strict';
 
 (function() {
+
+  var cookies = require('../node_modules/browser-cookies/src/browser-cookies.js');
+
   /** @enum {string} */
   var FileType = {
     'GIF': '',
@@ -301,8 +304,49 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
+
+    saveFilterImageInCookies(selectedFilter);
   };
+
+  /**
+   * Сохраняет последний выбранный фильтр в куки
+   * @param {string} filterName
+   */
+  function saveFilterImageInCookies(filterName) {
+    var today = new Date();
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+    today.setMilliseconds(0);
+
+    var lastBithdayGraceHopper = new Date(today.getFullYear(), 11, 9);
+    if (lastBithdayGraceHopper > today) {
+      lastBithdayGraceHopper = new Date(today.getFullYear() - 1, 11, 9);
+    }
+    var diffInDays = Math.round((today - lastBithdayGraceHopper) / 1000 / 60 / 60 / 24);
+
+    cookies.set('upload-filter', filterName, {
+      expires: diffInDays
+    });
+  }
+
+  /**
+   * Устанавливает фильтр по умолчанию
+   */
+  function setDefaultFilterImage() {
+    var filterName = cookies.get('upload-filter');
+    if (!filterName) {
+      return;
+    }
+
+    [].forEach.call(filterForm['upload-filter'], function(item) {
+      item.checked = (item.value === filterName);
+    });
+
+    filterForm.onchange();
+  }
 
   cleanupResizer();
   updateBackground();
+  setDefaultFilterImage();
 })();
