@@ -72,6 +72,35 @@
    * @return {boolean}
    */
   function resizeFormIsValid() {
+    var x = resizeForm.elements.x;
+    var y = resizeForm.elements.y;
+    var size = resizeForm.elements.size;
+    var valid = false;
+
+    valid = (x.value >= 0);
+    x.setCustomValidity(!valid ? 'Значение не может быть отрицательным!' : '');
+    if (!valid) {
+      return false;
+    }
+
+    valid = (y.value >= 0);
+    y.setCustomValidity(!valid ? 'Значение не может быть отрицательным!' : '');
+    if (!valid) {
+      return false;
+    }
+
+    valid = ((Number(x.value) + Number(size.value)) <= currentResizer._image.naturalWidth);
+    size.setCustomValidity(!valid ? 'Сумма значений полей «слева» и «сторона» не должна быть больше ширины исходного изображения!' : '');
+    if (!valid) {
+      return false;
+    }
+
+    valid = ((Number(y.value) + Number(size.value)) <= currentResizer._image.naturalHeight);
+    size.setCustomValidity(!valid ? 'Сумма значений полей «сверху» и «сторона» не должна быть больше высоты исходного изображения!' : '');
+    if (!valid) {
+      return false;
+    }
+
     return true;
   }
 
@@ -171,6 +200,18 @@
   };
 
   /**
+   * Обработчик ввода данных в форме кадрирования.
+   */
+  resizeForm.oninput = function() {
+    if (!resizeFormIsValid()) {
+      resizeForm.elements.fwd.click();
+      resizeForm.elements.fwd.disabled = true;
+    } else {
+      resizeForm.elements.fwd.disabled = false;
+    }
+  };
+
+  /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
    * и обновляет фон.
    * @param {Event} evt
@@ -206,6 +247,7 @@
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
     }
+
   };
 
   /**
