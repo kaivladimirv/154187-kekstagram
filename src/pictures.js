@@ -1,7 +1,5 @@
 'use strict';
 
-var pictures = [];
-
 function loadJsonpData(url, callbackName, callback) {
   window[callbackName] = callback;
 
@@ -11,5 +9,5 @@ function loadJsonpData(url, callbackName, callback) {
 }
 
 loadJsonpData('http://localhost:1506/api/pictures', 'onPicturesIsLoaded', function(data) {
-  pictures = data;
+  window.pictures = data;
 });
