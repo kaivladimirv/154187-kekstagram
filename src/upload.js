@@ -9,7 +9,7 @@
 
 (function() {
 
-  var cookies = require('../node_modules/browser-cookies/src/browser-cookies.js');
+  var cookies = require('browser-cookies');
 
   /** @enum {string} */
   var FileType = {
