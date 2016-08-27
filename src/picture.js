@@ -3,6 +3,7 @@
 var IMAGE_WIDTH = 182;
 var IMAGE_HEIGHT = 182;
 var TIMEOUT_IMAGE_LOAD = 10000;
+var gallery = require('./gallery');
 var pictureTemplate = createPictureTemplate();
 
 /**
@@ -22,7 +23,7 @@ function createPictureTemplate() {
 /**
  * Производит отрисовку указанного изображения на странице
  */
-function renderPicture(picture) {
+function renderPicture(picture, index) {
   var element = pictureTemplate.cloneNode(true);
 
   loadPicture(picture.url, function(isLoaded) {
@@ -37,7 +38,22 @@ function renderPicture(picture) {
     img.height = IMAGE_HEIGHT;
   });
 
+  onPictureClick(element, index);
+
   return element;
+}
+
+/**
+ * Назначает обработчик клика по изображению
+ */
+function onPictureClick(element, index) {
+  element.onclick = function(event) {
+    event.preventDefault();
+
+    gallery.show(index);
+
+    event.stopPropagation();
+  };
 }
 
 /**
