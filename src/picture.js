@@ -19,11 +19,10 @@ function createPictureTemplate() {
   }
 }
 
-
 /**
- * Производит отрисовку указанного изображения на странице
+ * Производит создание DOM-элемента для указанного изображения
  */
-function renderPicture(picture, index) {
+function createPicture(picture) {
   var element = pictureTemplate.cloneNode(true);
 
   loadPicture(picture.url, function(isLoaded) {
@@ -38,22 +37,7 @@ function renderPicture(picture, index) {
     img.height = IMAGE_HEIGHT;
   });
 
-  onPictureClick(element, index);
-
   return element;
-}
-
-/**
- * Назначает обработчик клика по изображению
- */
-function onPictureClick(element, index) {
-  element.onclick = function(event) {
-    event.preventDefault();
-
-    gallery.show(index);
-
-    event.stopPropagation();
-  };
 }
 
 /**
@@ -81,4 +65,45 @@ function loadPicture(url, callback) {
   image.src = url;
 }
 
-exports.render = renderPicture;
+/**
+ * Функция-конструктор создания объекта для работы с изображением
+ */
+function Picture(picture, index) {
+  this.data = picture;
+  this.data.index = index;
+  this.element = createPicture(picture);
+
+  this.addEventsListeners();
+}
+
+/**
+ * Добавляет обработчики событий
+ */
+Picture.prototype.addEventsListeners = function() {
+  this.onClick();
+};
+
+/**
+ * Назначает обработчик клика по изображению
+ */
+Picture.prototype.onClick = function() {
+  var self = this;
+
+  this.element.onclick = function(event) {
+    event.preventDefault();
+
+    gallery.show(self.data.index);
+
+    event.stopPropagation();
+  };
+};
+
+/**
+ * Удаляет обработчики событий
+ */
+Picture.prototype.remove = function() {
+  this.element.onclick = null;
+};
+
+
+module.exports = Picture;
