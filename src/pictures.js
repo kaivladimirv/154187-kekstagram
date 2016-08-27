@@ -2,6 +2,7 @@
 
 var load = require('./load');
 var picture = require('./picture');
+var gallery = require('./gallery');
 var filters = document.querySelector('.filters');
 var containerPicturesList = document.querySelector('.pictures');
 
@@ -15,11 +16,13 @@ function renderPicturesList(pictures) {
     return;
   }
 
-  pictures.forEach(function(item) {
-    containerPicturesList.appendChild(picture.render(item));
+  pictures.forEach(function(item, index) {
+    containerPicturesList.appendChild(picture.render(item, index));
   });
 
   filters.classList.remove('hidden');
+
+  gallery.setPictures(pictures);
 }
 
 load.fetchJsonp('http://localhost:1506/api/pictures', 'onPicturesIsLoaded', renderPicturesList);
