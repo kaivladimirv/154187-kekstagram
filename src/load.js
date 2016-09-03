@@ -1,15 +1,18 @@
 'use strict';
 
 /**
- * Загружает данные по протколу JSONP
+ * Загружает данные с указанного адреса
  */
-function fetchJsonp(url, callbackName, callback) {
-  window[callbackName] = callback;
+function fetch(url, params, callback) {
+  var xhr = new XMLHttpRequest();
 
-  var el = document.createElement('script');
-  el.src = url + '?callback=' + callbackName;
-  document.body.appendChild(el);
+  xhr.onload = function(evt) {
+    callback(JSON.parse(evt.target.response));
+  };
+
+  xhr.open('GET', url + '?from=' + params.from + '&to=' + params.to + '&filter=' + params.filter);
+  xhr.send();
 }
 
 
-exports.fetchJsonp = fetchJsonp;
+exports.fetch = fetch;

@@ -15,7 +15,21 @@ function Gallery() {
  * Устанавливает список изображений для просмотра
  */
 Gallery.prototype.setPictures = function(pictures) {
-  this.pictures = pictures;
+  this.pictures = this.pictures.concat(pictures);
+};
+
+/**
+ * Возвращает количество изображений в галереи
+ */
+Gallery.prototype.getPicturesCount = function() {
+  return this.pictures.length;
+};
+
+/**
+ * Очищает список изображений
+ */
+Gallery.prototype.clear = function() {
+  this.pictures = [];
 };
 
 /**
