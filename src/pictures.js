@@ -70,7 +70,7 @@ function fetchPicturesList(callback) {
  * или пока не будут получены все изображения
  */
 function fetchMorePicturesList() {
-  if (containerPicturesListIsFilled() || allPicturesIsloaded) {
+  if (allPicturesIsloaded || containerPicturesListIsFilled()) {
     return;
   }
 
@@ -100,21 +100,31 @@ function containerPicturesListIsFilled() {
 }
 
 /**
+ * Выполняет указанную функцию не чаще указанного интервала времени
+ */
+function throttle(callback, interval) {
+  var scrollTimeout;
+
+  return function() {
+    clearTimeout(scrollTimeout);
+
+    scrollTimeout = setTimeout(function() {
+      callback();
+    }, interval);
+  };
+}
+
+/**
  * Добавляет обработчик прокрутки страницы
  */
 function onWindowScroll() {
-  var scrollTimeout;
-
-  window.addEventListener('scroll', function() {
-    if (!isEndOfPageReached()) {
+  window.addEventListener('scroll', throttle(function() {
+    if (allPicturesIsloaded || !isEndOfPageReached()) {
       return;
     }
 
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(function() {
-      fetchPicturesList(renderPicturesList);
-    }, 100);
-  });
+    fetchPicturesList(renderPicturesList);
+  }, 100));
 }
 
 /**
