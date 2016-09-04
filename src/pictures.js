@@ -8,7 +8,7 @@ var containerPicturesList = document.querySelector('.pictures');
 var PICTURES_LOAD_URL = '/api/pictures';
 var PICTURES_LIMIT = 12;
 var currentPageNumber = 0;
-var currentFilterId = 'filter-popular';
+var currentFilterId;
 var allPicturesIsloaded = false;
 
 /**
@@ -100,6 +100,17 @@ function containerPicturesListIsFilled() {
 }
 
 /**
+ * Устанавливает фильтр
+ */
+function initFilter() {
+  currentFilterId = localStorage.getItem('lastFilterId') || 'filter-popular';
+  filters.elements['filter'].forEach(function(item) {
+    item.checked = (item.id === currentFilterId);
+  });
+}
+
+
+/**
  * Выполняет указанную функцию не чаще указанного интервала времени
  */
 function throttle(callback, interval) {
@@ -137,6 +148,7 @@ function onFilterChange() {
     }
 
     currentFilterId = evt.target.getAttribute('for');
+    localStorage.setItem('lastFilterId', currentFilterId);
 
     clearPicturesList();
     fetchMorePicturesList();
@@ -144,6 +156,7 @@ function onFilterChange() {
 }
 
 
+initFilter();
 //Производим загрузку первоначального списка изображений при открытии страницы
 fetchPicturesList(function(pictures) {
   filters.classList.add('hidden');
