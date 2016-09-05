@@ -80,29 +80,26 @@ function Picture(picture, index) {
  * Добавляет обработчики событий
  */
 Picture.prototype.addEventsListeners = function() {
-  this.onClick();
+  this.onClick = this.onClick.bind(this);
+  this.element.addEventListener('click', this.onClick);
 };
 
 /**
  * Назначает обработчик клика по изображению
  */
-Picture.prototype.onClick = function() {
-  var self = this;
+Picture.prototype.onClick = function(event) {
+  event.preventDefault();
 
-  this.element.onclick = function(event) {
-    event.preventDefault();
+  gallery.show(this.data.index);
 
-    gallery.show(self.data.index);
-
-    event.stopPropagation();
-  };
+  event.stopPropagation();
 };
 
 /**
  * Удаляет обработчики событий
  */
 Picture.prototype.remove = function() {
-  this.element.onclick = null;
+  this.element.removeEventListener('click', this.onClick);
 };
 
 

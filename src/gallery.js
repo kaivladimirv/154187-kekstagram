@@ -71,40 +71,35 @@ Gallery.prototype.hide = function() {
  * Добавляет обработчики событий
  */
 Gallery.prototype.addEventsListeners = function() {
-  this.onButtonCloseClick();
-  this.onElementClick();
+  this.onButtonCloseClick = this.onButtonCloseClick.bind(this);
+  this.buttonClose.addEventListener('click', this.onButtonCloseClick);
+
+  this.onElementClick = this.onElementClick.bind(this);
+  this.element.addEventListener('click', this.onElementClick);
 };
 
 /**
  * Удаляет обработчики событий
  */
 Gallery.prototype.removeEventsListeners = function() {
-  this.buttonClose.onclick = null;
-  this.element.onclick = null;
+  this.buttonClose.removeEventListener('click', this.onButtonCloseClick);
+  this.element.removeEventListener('click', this.onElementClick);
 };
 
 /**
- * Назначает обработчик клика по кнопке закрыть
+ * Обработчик клика по кнопке закрыть
  */
 Gallery.prototype.onButtonCloseClick = function() {
-  var self = this;
-
-  this.buttonClose.onclick = function() {
-    self.hide();
-  };
+  this.hide();
 };
 
 /**
- * Назначает обработчик клика на элемент галереи
+ * Обработчик клика на элемент галереи
  */
 Gallery.prototype.onElementClick = function() {
-  var self = this;
+  var nextIndexPicture = (this.activePicture >= (this.pictures.length - 1)) ? 0 : (this.activePicture + 1);
 
-  this.element.onclick = function() {
-    var nextIndexPicture = (self.activePicture >= (self.pictures.length - 1)) ? 0 : (self.activePicture + 1);
-
-    self.setActivePicture(nextIndexPicture);
-  };
+  this.setActivePicture(nextIndexPicture);
 };
 
 
