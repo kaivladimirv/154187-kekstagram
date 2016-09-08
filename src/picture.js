@@ -4,6 +4,8 @@ var IMAGE_WIDTH = 182;
 var IMAGE_HEIGHT = 182;
 var TIMEOUT_IMAGE_LOAD = 10000;
 var gallery = require('./gallery');
+var utils = require('./utils');
+var BaseComponent = require('./base-component');
 var pictureTemplate = createPictureTemplate();
 
 /**
@@ -69,37 +71,21 @@ function loadPicture(url, callback) {
  * Функция-конструктор создания объекта для работы с изображением
  */
 function Picture(picture, index) {
+  BaseComponent.call(this, createPicture(picture));
+
   this.data = picture;
   this.data.index = index;
-  this.element = createPicture(picture);
-
-  this.addEventsListeners();
 }
 
-/**
- * Добавляет обработчики событий
- */
-Picture.prototype.addEventsListeners = function() {
-  this.onClick = this.onClick.bind(this);
-  this.element.addEventListener('click', this.onClick);
-};
+utils.inherit(Picture, BaseComponent);
 
 /**
  * Назначает обработчик клика по изображению
  */
-Picture.prototype.onClick = function(event) {
-  event.preventDefault();
+Picture.prototype.onClick = function(evt) {
+  evt.preventDefault();
 
   gallery.show(this.data.index);
-
-  event.stopPropagation();
-};
-
-/**
- * Удаляет обработчики событий
- */
-Picture.prototype.remove = function() {
-  this.element.removeEventListener('click', this.onClick);
 };
 
 

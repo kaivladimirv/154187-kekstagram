@@ -3,8 +3,7 @@
 function BaseComponent(element) {
   this.element = element;
 
-  this.onClick = this.onClick.bind(this);
-  this.element.addEventListener('click', this.onClick);
+  this.addEventsListeners();
 }
 
 /**
@@ -23,11 +22,17 @@ BaseComponent.prototype.remove = function() {
 };
 
 /**
+ * Добавляет обработчики событий
+ */
+BaseComponent.prototype.addEventsListeners = function() {
+  this.onClick = this.onClick.bind(this);
+  this.element.addEventListener('click', this.onClick);
+};
+
+/**
  * Обработчик клика по компоненту
  */
-BaseComponent.prototype.onClick = function() {
-  console.log('Click on the BaseComponent');
-};
+BaseComponent.prototype.onClick = function() {};
 
 
 module.exports = BaseComponent;

@@ -23,7 +23,8 @@ function renderPicturesList(pictures) {
   var nextIndexPicture = gallery.getPicturesCount();
 
   pictures.forEach(function(item) {
-    containerPicturesList.appendChild(new Picture(item, nextIndexPicture).element);
+    var picture = new Picture(item, nextIndexPicture);
+    picture.appendTo(containerPicturesList);
 
     nextIndexPicture++;
   });
