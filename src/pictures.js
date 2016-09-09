@@ -3,6 +3,7 @@
 var load = require('./load');
 var Picture = require('./picture');
 var gallery = require('./gallery');
+var PictureData = require('./picture-data');
 var filters = document.querySelector('.filters');
 var containerPicturesList = document.querySelector('.pictures');
 var PICTURES_LOAD_URL = '/api/pictures';
@@ -23,7 +24,8 @@ function renderPicturesList(pictures) {
   var nextIndexPicture = gallery.getPicturesCount();
 
   pictures.forEach(function(item) {
-    var picture = new Picture(item, nextIndexPicture);
+    var pictureData = new PictureData(item, nextIndexPicture);
+    var picture = new Picture(pictureData);
     picture.appendTo(containerPicturesList);
 
     nextIndexPicture++;
