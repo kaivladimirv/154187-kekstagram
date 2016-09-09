@@ -73,7 +73,13 @@ function loadPicture(url, callback) {
 function Picture(pictureData) {
   BaseComponent.call(this, createPicture(pictureData));
 
+  this.comments = this.element.querySelector('.picture-comments');
+  this.likes = this.element.querySelector('.picture-likes');
+
   this.pictureData = pictureData;
+
+  this.renderСommentsCount();
+  this.renderLikesCount();
 }
 
 utils.inherit(Picture, BaseComponent);
@@ -85,6 +91,20 @@ Picture.prototype.onClick = function(evt) {
   evt.preventDefault();
 
   gallery.show(this.pictureData.getIndex());
+};
+
+/**
+ * Производит отрисовку количества комментариев
+ */
+Picture.prototype.renderСommentsCount = function() {
+  this.comments.textContent = this.pictureData.getСommentsCount();
+};
+
+/**
+ * Производит отрисовку количества лайков
+ */
+Picture.prototype.renderLikesCount = function() {
+  this.likes.textContent = this.pictureData.getLikesCount();
 };
 
 

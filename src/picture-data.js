@@ -22,7 +22,6 @@ PictureData.prototype.getUrl = function() {
   return this.data.url;
 };
 
-
 /**
  * Возвращает количество лайков
  */
