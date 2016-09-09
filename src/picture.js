@@ -24,17 +24,17 @@ function createPictureTemplate() {
 /**
  * Производит создание DOM-элемента для указанного изображения
  */
-function createPicture(picture) {
+function createPicture(pictureData) {
   var element = pictureTemplate.cloneNode(true);
 
-  loadPicture(picture.url, function(isLoaded) {
+  loadPicture(pictureData.getUrl(), function(isLoaded) {
     if (!isLoaded) {
       element.classList.add('picture-load-failure');
       return;
     }
 
     var img = element.querySelector('img');
-    img.src = picture.url;
+    img.src = pictureData.getUrl();
     img.width = IMAGE_WIDTH;
     img.height = IMAGE_HEIGHT;
   });
@@ -70,11 +70,10 @@ function loadPicture(url, callback) {
 /**
  * Функция-конструктор создания объекта для работы с изображением
  */
-function Picture(picture, index) {
-  BaseComponent.call(this, createPicture(picture));
+function Picture(pictureData) {
+  BaseComponent.call(this, createPicture(pictureData));
 
-  this.data = picture;
-  this.data.index = index;
+  this.pictureData = pictureData;
 }
 
 utils.inherit(Picture, BaseComponent);
@@ -85,7 +84,7 @@ utils.inherit(Picture, BaseComponent);
 Picture.prototype.onClick = function(evt) {
   evt.preventDefault();
 
-  gallery.show(this.data.index);
+  gallery.show(this.pictureData.getIndex());
 };
 
 
