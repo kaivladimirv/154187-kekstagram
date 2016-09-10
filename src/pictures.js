@@ -22,16 +22,18 @@ function renderPicturesList(pictures) {
   }
 
   var nextIndexPicture = gallery.getPicturesCount();
+  var picturesData = [];
 
   pictures.forEach(function(item) {
     var pictureData = new PictureData(item, nextIndexPicture);
     var picture = new Picture(pictureData);
     picture.appendTo(containerPicturesList);
 
+    picturesData.push(pictureData);
     nextIndexPicture++;
   });
 
-  gallery.setPictures(pictures);
+  gallery.setPictures(picturesData);
 
   return true;
 }
@@ -107,11 +109,10 @@ function containerPicturesListIsFilled() {
  */
 function initFilter() {
   currentFilterId = localStorage.getItem('lastFilterId') || 'filter-popular';
-  filters.elements['filter'].forEach(function(item) {
+  [].forEach.call(filters.elements['filter'], function(item) {
     item.checked = (item.id === currentFilterId);
   });
 }
-
 
 /**
  * Выполняет указанную функцию не чаще указанного интервала времени

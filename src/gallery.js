@@ -42,9 +42,10 @@ Gallery.prototype.setActivePicture = function(indexPicture) {
 
   this.activePicture = indexPicture;
 
-  this.element.src = this.pictures[indexPicture].url;
-  this.likesCount.textContent = this.pictures[indexPicture].likes;
-  this.commentsCount.textContent = this.pictures[indexPicture].comments;
+  this.element.src = this.pictures[indexPicture].getUrl();
+
+  this.renderСommentsCount();
+  this.renderLikesCount();
 };
 
 /**
@@ -68,6 +69,20 @@ Gallery.prototype.hide = function() {
 };
 
 /**
+ * Производит отрисовку количества комментариев
+ */
+Gallery.prototype.renderСommentsCount = function() {
+  this.commentsCount.textContent = this.pictures[this.activePicture].getСommentsCount();
+};
+
+/**
+ * Производит отрисовку количества лайков
+ */
+Gallery.prototype.renderLikesCount = function() {
+  this.likesCount.textContent = this.pictures[this.activePicture].getLikesCount();
+};
+
+/**
  * Добавляет обработчики событий
  */
 Gallery.prototype.addEventsListeners = function() {
@@ -76,6 +91,10 @@ Gallery.prototype.addEventsListeners = function() {
 
   this.onElementClick = this.onElementClick.bind(this);
   this.element.addEventListener('click', this.onElementClick);
+
+  this.onLikesCountClick = this.onLikesCountClick.bind(this);
+  this.likesCount.addEventListener('click', this.onLikesCountClick);
+
 };
 
 /**
@@ -100,6 +119,14 @@ Gallery.prototype.onElementClick = function() {
   var nextIndexPicture = (this.activePicture >= (this.pictures.length - 1)) ? 0 : (this.activePicture + 1);
 
   this.setActivePicture(nextIndexPicture);
+};
+
+/**
+ * Обработчик клика по элементу количество лайков
+ */
+Gallery.prototype.onLikesCountClick = function() {
+  this.pictures[this.activePicture].likesIncrement();
+  this.renderLikesCount();
 };
 
 

@@ -80,6 +80,9 @@ function Picture(pictureData) {
 
   this.renderСommentsCount();
   this.renderLikesCount();
+
+  this.onLikesCountIsChanged = this.onLikesCountIsChanged.bind(this);
+  document.addEventListener('likesCountIsChanged', this.onLikesCountIsChanged);
 }
 
 utils.inherit(Picture, BaseComponent);
@@ -91,6 +94,17 @@ Picture.prototype.onClick = function(evt) {
   evt.preventDefault();
 
   gallery.show(this.pictureData.getIndex());
+};
+
+/**
+ * Обрабатывает событие изменения количетсва лайков
+ */
+Picture.prototype.onLikesCountIsChanged = function(evt) {
+  if (this.pictureData.getIndex() !== evt.detail.index) {
+    return;
+  }
+
+  this.renderLikesCount();
 };
 
 /**

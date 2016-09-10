@@ -34,6 +34,14 @@ PictureData.prototype.getLikesCount = function() {
  */
 PictureData.prototype.likesIncrement = function() {
   this.data.likes++;
+
+  var event = new CustomEvent('likesCountIsChanged', {
+    detail: {
+      index: this.data.index
+    }
+  });
+
+  document.dispatchEvent(event);
 };
 
 /**
