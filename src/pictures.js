@@ -74,14 +74,19 @@ function fetchPicturesList(callback) {
  * пока видимая часть окна браузера не будет заполнена изображениями
  * или пока не будут получены все изображения
  */
-function fetchMorePicturesList() {
+function fetchMorePicturesList(callback) {
   if (allPicturesIsloaded || containerPicturesListIsFilled()) {
+    if (typeof callback === 'function') {
+      callback();
+    }
     return;
   }
 
   fetchPicturesList(function(pictures) {
     renderPicturesList(pictures);
-    setTimeout(fetchMorePicturesList, 50);
+    setTimeout(function() {
+      fetchMorePicturesList(callback);
+    }, 50);
   });
 }
 
@@ -174,7 +179,8 @@ fetchPicturesList(function(pictures) {
   onFilterChange();
   onWindowScroll();
 
-  fetchMorePicturesList();
+  fetchMorePicturesList(function() {
+    window.dispatchEvent(new Event('hashchange'));
+  });
 
-  window.dispatchEvent(new Event('hashchange'));
 });
