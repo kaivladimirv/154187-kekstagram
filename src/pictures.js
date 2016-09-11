@@ -175,4 +175,6 @@ fetchPicturesList(function(pictures) {
   onWindowScroll();
 
   fetchMorePicturesList();
+
+  window.dispatchEvent(new Event('hashchange'));
 });

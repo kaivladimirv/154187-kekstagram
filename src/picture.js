@@ -3,7 +3,6 @@
 var IMAGE_WIDTH = 182;
 var IMAGE_HEIGHT = 182;
 var TIMEOUT_IMAGE_LOAD = 10000;
-var gallery = require('./gallery');
 var utils = require('./utils');
 var BaseComponent = require('./base-component');
 var pictureTemplate = createPictureTemplate();
@@ -93,7 +92,7 @@ utils.inherit(Picture, BaseComponent);
 Picture.prototype.onClick = function(evt) {
   evt.preventDefault();
 
-  gallery.show(this.pictureData.getIndex());
+  window.location.hash = 'photo/' + this.pictureData.getUrl();
 };
 
 /**
