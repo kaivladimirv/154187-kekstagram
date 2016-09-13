@@ -2,8 +2,6 @@
 
 function BaseComponent(element) {
   this.element = element;
-
-  this.addEventsListeners();
 }
 
 /**
@@ -11,6 +9,8 @@ function BaseComponent(element) {
  */
 BaseComponent.prototype.appendTo = function(parent) {
   parent.appendChild(this.element);
+
+  this.addEventsListeners();
 };
 
 /**
