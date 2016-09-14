@@ -1,18 +1,25 @@
 'use strict';
 
-function Gallery() {
-  this.pictures = [];
-  this.activePicture = 0;
+var utils = require('./utils');
+var BaseComponent = require('./base-component');
 
+function Gallery() {
   this.overlay = document.querySelector('.gallery-overlay');
   this.buttonClose = document.querySelector('.gallery-overlay-close');
-  this.element = document.querySelector('.gallery-overlay-image');
   this.likesCount = document.querySelector('.likes-count');
   this.commentsCount = document.querySelector('.comments-count');
 
+  this.pictures = [];
+  this.activePicture = 0;
+  this.eventListenersIsAdded = false;
+
   this.onLocationHashChanged = this.onLocationHashChanged.bind(this);
   window.addEventListener('hashchange', this.onLocationHashChanged);
+
+  BaseComponent.call(this, document.querySelector('.gallery-overlay-image'));
 }
+
+utils.inherit(Gallery, BaseComponent);
 
 /**
  * Устанавливает список изображений для просмотра
@@ -117,14 +124,20 @@ Gallery.prototype.renderLikesCount = function() {
  * Добавляет обработчики событий
  */
 Gallery.prototype.addEventsListeners = function() {
+  if (this.eventListenersIsAdded) {
+    return;
+  }
+
   this.onButtonCloseClick = this.onButtonCloseClick.bind(this);
   this.buttonClose.addEventListener('click', this.onButtonCloseClick);
 
-  this.onElementClick = this.onElementClick.bind(this);
-  this.element.addEventListener('click', this.onElementClick);
+  this.onClick = this.onClick.bind(this);
+  this.element.addEventListener('click', this.onClick);
 
   this.onLikesCountClick = this.onLikesCountClick.bind(this);
   this.likesCount.addEventListener('click', this.onLikesCountClick);
+
+  this.eventListenersIsAdded = true;
 };
 
 /**
@@ -132,7 +145,10 @@ Gallery.prototype.addEventsListeners = function() {
  */
 Gallery.prototype.removeEventsListeners = function() {
   this.buttonClose.removeEventListener('click', this.onButtonCloseClick);
-  this.element.removeEventListener('click', this.onElementClick);
+  this.element.removeEventListener('click', this.onClick);
+  this.likesCount.removeEventListener('click', this.onLikesCountClick);
+
+  this.eventListenersIsAdded = false;
 };
 
 /**
@@ -145,7 +161,7 @@ Gallery.prototype.onButtonCloseClick = function() {
 /**
  * Обработчик клика на элемент галереи
  */
-Gallery.prototype.onElementClick = function() {
+Gallery.prototype.onClick = function() {
   var nextIndexPicture = (this.activePicture >= (this.pictures.length - 1)) ? 0 : (this.activePicture + 1);
 
   window.location.hash = 'photo/' + this.pictures[nextIndexPicture].getUrl();
