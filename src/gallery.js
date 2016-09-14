@@ -63,9 +63,13 @@ Gallery.prototype.setActivePicture = function(indexPicture) {
  * Возвращает индекс изображения.
  */
 Gallery.prototype.findIndexPictureByUrl = function(urlPicture) {
-  return this.pictures.findIndex(function(element) {
-    return element.getUrl() === urlPicture;
-  });
+  for (var index = 0; index < this.pictures.length; index++) {
+    if (this.pictures[index].getUrl() === urlPicture) {
+      return index;
+    }
+  }
+
+  return -1;
 };
 
 /**
