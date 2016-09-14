@@ -35,13 +35,11 @@ PictureData.prototype.getLikesCount = function() {
 PictureData.prototype.likesIncrement = function() {
   this.data.likes++;
 
-  var event = new CustomEvent('likesCountIsChanged', {
-    detail: {
-      index: this.data.index
-    }
+  var evt = document.createEvent('CustomEvent');
+  evt.initCustomEvent('likesCountIsChanged', true, true, {
+    index: this.data.index
   });
-
-  document.dispatchEvent(event);
+  document.dispatchEvent(evt);
 };
 
 /**

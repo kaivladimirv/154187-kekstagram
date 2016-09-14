@@ -180,7 +180,9 @@ fetchPicturesList(function(pictures) {
   onWindowScroll();
 
   fetchMorePicturesList(function() {
-    window.dispatchEvent(new Event('hashchange'));
+    var evt = document.createEvent('Event');
+    evt.initEvent('hashchange', true, true);
+    window.dispatchEvent(evt);
   });
 
 });

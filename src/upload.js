@@ -373,7 +373,9 @@
       item.checked = (item.value === filterName);
     });
 
-    filterForm.dispatchEvent(new Event('change'));
+    var evt = document.createEvent('Event');
+    evt.initEvent('change', true, true);
+    filterForm.dispatchEvent(evt);
   }
 
   cleanupResizer();

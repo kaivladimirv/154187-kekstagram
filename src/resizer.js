@@ -31,15 +31,15 @@
 
       // Размер меньшей стороны изображения.
       var side = Math.min(
-          this._container.width * INITIAL_SIDE_RATIO,
-          this._container.height * INITIAL_SIDE_RATIO);
+        this._container.width * INITIAL_SIDE_RATIO,
+        this._container.height * INITIAL_SIDE_RATIO);
 
       // Изначально предлагаемое кадрирование — часть по центру с размером в 3/4
       // от размера меньшей стороны.
       this._resizeConstraint = new Square(
-          this._container.width / 2 - side / 2,
-          this._container.height / 2 - side / 2,
-          side);
+        this._container.width / 2 - side / 2,
+        this._container.height / 2 - side / 2,
+        side);
 
       // Отрисовка изначального состояния канваса.
       this.setConstraint();
@@ -107,10 +107,10 @@
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
       this.drawStrokeRectZigzag(
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side,
-          this._resizeConstraint.side);
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+        this._resizeConstraint.side,
+        this._resizeConstraint.side);
 
       this.drawOverlay();
 
@@ -126,8 +126,8 @@
     },
 
     /**
-    * Отрисовка прямоугольника, обозначающего область изображения после кадрирования.
-    */
+     * Отрисовка прямоугольника, обозначающего область изображения после кадрирования.
+     */
     drawStrokeRectDot: function(x, y, width, height) {
       var lineTop = {
         x: x,
@@ -156,12 +156,12 @@
     },
 
     /**
-    * Отрисовка линии ввиде точек
-    * @param {number} x
-    * @param {number} y
-    * @param {number} length
-    * @param {boolean} vertical
-    */
+     * Отрисовка линии ввиде точек
+     * @param {number} x
+     * @param {number} y
+     * @param {number} length
+     * @param {boolean} vertical
+     */
     drawLineDot: function(x, y, length, vertical) {
       var INDENT = 10;
       var radius = this._ctx.lineWidth / 2;
@@ -186,9 +186,9 @@
     },
 
     /**
-    * Отрисовка прямоугольника, обозначающего область изображения после кадрирования.
-    * Границы отображаются ввиде зигзагов
-    */
+     * Отрисовка прямоугольника, обозначающего область изображения после кадрирования.
+     * Границы отображаются ввиде зигзагов
+     */
     drawStrokeRectZigzag: function(x, y, width, height) {
       var SIZE = 10;
       var lengthLine = width - SIZE * 2;
@@ -241,14 +241,14 @@
     },
 
     /**
-    * Отрисовка линии зигзагами
-    * @param {number} x
-    * @param {number} y
-    * @param {number} length
-    * @param {number} size
-    * @param {boolean} vertical
-    * @param {boolean} turnOver
-    */
+     * Отрисовка линии зигзагами
+     * @param {number} x
+     * @param {number} y
+     * @param {number} length
+     * @param {number} size
+     * @param {boolean} vertical
+     * @param {boolean} turnOver
+     */
     drawLineZigzag: function(x, y, length, size, vertical, turnOver) {
       var position = vertical ? y + size : x + size;
       var positionEnd = position + length;
@@ -294,8 +294,8 @@
     },
 
     /**
-    * Отрисовка оверлея
-    */
+     * Отрисовка оверлея
+     */
     drawOverlay: function() {
       var widthLeftRect = ((this._container.width - this._resizeConstraint.side) / 2) - this._ctx.lineWidth;
       var widthRightRect = ((this._container.width - this._resizeConstraint.side) / 2) + (this._ctx.lineWidth / 2);
@@ -305,38 +305,32 @@
       this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
 
       //Левый прямоугольник
-      this._ctx.fillRect(
-          -(this._container.width / 2),
-          -(this._container.height / 2),
-          widthLeftRect,
-          this._container.height);
+      this._ctx.fillRect(-(this._container.width / 2), -(this._container.height / 2),
+        widthLeftRect,
+        this._container.height);
 
       //Правый прямоугольник
       this._ctx.fillRect(
-          (this._container.width / 2) - widthRightRect,
-          -(this._container.height / 2),
-          widthRightRect,
-          this._container.height);
+        (this._container.width / 2) - widthRightRect, -(this._container.height / 2),
+        widthRightRect,
+        this._container.height);
 
       //Верхний прямоугольник
-      this._ctx.fillRect(
-          -(this._container.width / 2) + widthLeftRect,
-          -(this._container.height / 2),
-          this._resizeConstraint.side + (this._ctx.lineWidth / 2),
-          heightTopRect);
+      this._ctx.fillRect(-(this._container.width / 2) + widthLeftRect, -(this._container.height / 2),
+        this._resizeConstraint.side + (this._ctx.lineWidth / 2),
+        heightTopRect);
 
       //Нижний прямоугольник
-      this._ctx.fillRect(
-          -(this._container.width / 2) + widthLeftRect,
-          (this._container.height / 2) - heightBottomRect,
-          this._resizeConstraint.side + (this._ctx.lineWidth / 2),
-          heightBottomRect);
+      this._ctx.fillRect(-(this._container.width / 2) + widthLeftRect,
+        (this._container.height / 2) - heightBottomRect,
+        this._resizeConstraint.side + (this._ctx.lineWidth / 2),
+        heightBottomRect);
     },
 
     /**
-    * Отрисовка подписи над прямоугольником, обозначающим область изображения после кадрирования
-    * @param {string} caption
-    */
+     * Отрисовка подписи над прямоугольником, обозначающим область изображения после кадрирования
+     * @param {string} caption
+     */
     drawRectConstrainCaption: function(caption) {
       var fontSize = 12;
 
@@ -345,9 +339,8 @@
       this._ctx.textAlign = 'center';
 
       this._ctx.fillText(
-          caption,
-          0,
-          -(this._resizeConstraint.side / 2) - fontSize);
+        caption,
+        0, -(this._resizeConstraint.side / 2) - fontSize);
     },
 
     /**
@@ -382,8 +375,8 @@
      */
     updatePosition: function(x, y) {
       this.moveConstraint(
-          this._cursorPosition.x - x,
-          this._cursorPosition.y - y);
+        this._cursorPosition.x - x,
+        this._cursorPosition.y - y);
       this._cursorPosition = new Coordinate(x, y);
     },
 
@@ -443,9 +436,9 @@
      */
     moveConstraint: function(deltaX, deltaY, deltaSide) {
       this.setConstraint(
-          this._resizeConstraint.x + (deltaX || 0),
-          this._resizeConstraint.y + (deltaY || 0),
-          this._resizeConstraint.side + (deltaSide || 0));
+        this._resizeConstraint.x + (deltaX || 0),
+        this._resizeConstraint.y + (deltaY || 0),
+        this._resizeConstraint.side + (deltaSide || 0));
     },
 
     /**
@@ -468,7 +461,10 @@
 
       requestAnimationFrame(function() {
         this.redraw();
-        window.dispatchEvent(new CustomEvent('resizerchange'));
+
+        var evt = document.createEvent('Event');
+        evt.initEvent('resizerchange', true, true);
+        window.dispatchEvent(evt);
       }.bind(this));
     },
 
@@ -501,9 +497,7 @@
       var temporaryCtx = temporaryCanvas.getContext('2d');
       temporaryCanvas.width = this._resizeConstraint.side;
       temporaryCanvas.height = this._resizeConstraint.side;
-      temporaryCtx.drawImage(this._image,
-          -this._resizeConstraint.x,
-          -this._resizeConstraint.y);
+      temporaryCtx.drawImage(this._image, -this._resizeConstraint.x, -this._resizeConstraint.y);
       imageToExport.src = temporaryCanvas.toDataURL('image/png');
 
       return imageToExport;
